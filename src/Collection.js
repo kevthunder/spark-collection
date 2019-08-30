@@ -1,4 +1,10 @@
+/**
+ * @template T
+ */
 class Collection {
+  /**
+   * @param {Collection.<T>|Array.<T>|T} [arr]
+   */
   constructor (arr) {
     if (arr != null) {
       if (typeof arr.toArray === 'function') {
@@ -15,6 +21,12 @@ class Collection {
 
   changed () {}
 
+  /**
+   * @param {Collection.<T>|Array.<T>} old
+   * @param {boolean} ordered
+   * @param {function(T,T): boolean} compareFunction
+   * @return {boolean}
+   */
   checkChanges (old, ordered = true, compareFunction = null) {
     if (compareFunction == null) {
       compareFunction = function (a, b) {
@@ -35,14 +47,26 @@ class Collection {
     }))
   }
 
+  /**
+   * @param {number} i
+   * @return {T}
+   */
   get (i) {
     return this._array[i]
   }
 
+  /**
+   * @return {T}
+   */
   getRandom () {
     return this._array[Math.floor(Math.random() * this._array.length)]
   }
 
+  /**
+   * @param {number} i
+   * @param {T} val
+   * @return {T}
+   */
   set (i, val) {
     var old
     if (this._array[i] !== val) {
@@ -53,22 +77,34 @@ class Collection {
     return val
   }
 
+  /**
+   * @param {T} val
+   */
   add (val) {
     if (!this._array.includes(val)) {
       return this.push(val)
     }
+    return this
   }
 
+  /**
+   * @param {T} val
+   */
   remove (val) {
     var index, old
     index = this._array.indexOf(val)
     if (index !== -1) {
       old = this.toArray()
       this._array.splice(index, 1)
-      return this.changed(old)
+      this.changed(old)
     }
+    return this
   }
 
+  /**
+   * @param {function(T): boolean} fn
+   * @return {T}
+   */
   pluck (fn) {
     var found, index, old
     index = this._array.findIndex(fn)
@@ -83,25 +119,41 @@ class Collection {
     }
   }
 
+  /**
+   * @return {Array.<T>}
+   */
   toArray () {
     return this._array.slice()
   }
 
+  /**
+   * @return {number}
+   */
   count () {
     return this._array.length
   }
 
-  static newSubClass (fn, arr) {
+  /**
+   * @template ItemType
+   * @param {Object} toAppend
+   * @param {Collection.<ItemType>|Array.<ItemType>|ItemType} [arr]
+   * @return {Collection.<ItemType>}
+   */
+  static newSubClass (toAppend, arr) {
     var SubClass
-    if (typeof fn === 'object') {
+    if (typeof toAppend === 'object') {
       SubClass = class extends this {}
-      Object.assign(SubClass.prototype, fn)
+      Object.assign(SubClass.prototype, toAppend)
       return new SubClass(arr)
     } else {
       return new this(arr)
     }
   }
 
+  /**
+   * @param {Collection.<T>|Array.<T>|T} [arr]
+   * @return {Collection.<T>}
+   */
   copy (arr) {
     var coll
     if (arr == null) {
@@ -111,18 +163,30 @@ class Collection {
     return coll
   }
 
+  /**
+   * @param {*} arr
+   * @return {boolean}
+   */
   equals (arr) {
     return (this.count() === (typeof arr.count === 'function' ? arr.count() : arr.length)) && this.every(function (val, i) {
       return arr[i] === val
     })
   }
 
+  /**
+   * @param {Collection.<T>|Array.<T>} arr
+   * @return {Array.<T>}
+   */
   getAddedFrom (arr) {
     return this._array.filter(function (item) {
       return !arr.includes(item)
     })
   }
 
+  /**
+   * @param {Collection.<T>|Array.<T>} arr
+   * @return {Array.<T>}
+   */
   getRemovedFrom (arr) {
     return arr.filter((item) => {
       return !this.includes(item)
