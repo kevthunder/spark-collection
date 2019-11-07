@@ -81,6 +81,13 @@ describe('Collection', function () {
     assert.equal(coll.count(), 2, 'new Count')
     return assert.equal(coll.toString(), '1,3')
   })
+  it('can be concatenated with other collections', function () {
+    const coll1 = new Collection([1, 2])
+    const coll2 = new Collection([3, 4])
+    const coll3 = new Collection([5, 6])
+    const concatenated = coll1.concat(coll2, coll3)
+    assert.deepEqual(concatenated.toArray(), [1, 2, 3, 4, 5, 6])
+  })
   it('should trigger changed when seting item', function () {
     var calls, coll
     calls = 0
@@ -204,7 +211,7 @@ describe('Collection', function () {
     assert.equal(coll2.toString(), '1,2,3')
     return assert.equal(coll.toString(), '1,2,3,4')
   })
-  return it('returns a collection when calling filter and forward added functions', function () {
+  it('returns a collection when calling filter and forward added functions', function () {
     var coll, res
     coll = Collection.newSubClass({
       test: function () {

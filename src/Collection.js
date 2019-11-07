@@ -120,6 +120,14 @@ class Collection {
   }
 
   /**
+   * @param {Array.<Collection.<T>>|Array.<Array.<T>>|Array.<T>} arr
+   * @return {Collection.<T>}
+   */
+  concat (...arr) {
+    return this.copy(this._array.concat(...arr.map((a) => a.toArray == null ? a : a.toArray())))
+  }
+
+  /**
    * @return {Array.<T>}
    */
   toArray () {
@@ -196,7 +204,7 @@ class Collection {
 
 Collection.readFunctions = ['every', 'find', 'findIndex', 'forEach', 'includes', 'indexOf', 'join', 'lastIndexOf', 'map', 'reduce', 'reduceRight', 'some', 'toString']
 
-Collection.readListFunctions = ['concat', 'filter', 'slice']
+Collection.readListFunctions = ['filter', 'slice']
 
 Collection.writefunctions = ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift']
 
