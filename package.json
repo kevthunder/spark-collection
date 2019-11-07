@@ -1,6 +1,6 @@
 {
   "name": "spark-collection",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A Collection library for when arrays are not enough",
   "main": "index.js",
   "repository": {
