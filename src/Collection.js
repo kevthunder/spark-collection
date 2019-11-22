@@ -119,6 +119,21 @@ class Collection {
     }
   }
 
+  chooseRandom (filter, rng = Math.random) {
+    if (!filter) {
+      return this._array[Math.floor(rng() * this.length)]
+    }
+    const remaining = this._array.slice()
+    while (remaining.length > 0) {
+      const pos = Math.floor(rng() * remaining.length)
+      if (filter(remaining[pos])) {
+        return remaining[pos]
+      }
+      remaining.splice(pos, 1)
+    }
+    return null
+  }
+
   /**
    * @param {Array.<Collection.<T>>|Array.<Array.<T>>|Array.<T>} arr
    * @return {Collection.<T>}

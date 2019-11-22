@@ -1,7 +1,7 @@
 
 const assert = require('chai').assert
-
 const Collection = require('../src/Collection')
+const Alea = require('seedrandom/lib/alea')
 
 describe('Collection', function () {
   it('can count items', function () {
@@ -80,6 +80,27 @@ describe('Collection', function () {
     })
     assert.equal(coll.count(), 2, 'new Count')
     return assert.equal(coll.toString(), '1,3')
+  })
+  it('can choose random item', function () {
+    const rng = new Alea('seed')
+    const coll = new Collection([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert.equal(coll.chooseRandom(null, rng), 1)
+    assert.equal(coll.chooseRandom(null, rng), 6)
+    assert.equal(coll.chooseRandom(null, rng), 6)
+    assert.equal(coll.chooseRandom(null, rng), 8)
+    assert.equal(coll.chooseRandom(null, rng), 5)
+  })
+  it('can choose random item with filter', function () {
+    const rng = new Alea('seed')
+    const filter = function (i) {
+      return i % 2 === 0
+    }
+    const coll = new Collection([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    assert.equal(coll.chooseRandom(filter, rng), 6)
+    assert.equal(coll.chooseRandom(filter, rng), 6)
+    assert.equal(coll.chooseRandom(filter, rng), 8)
+    assert.equal(coll.chooseRandom(filter, rng), 2)
+    assert.equal(coll.chooseRandom(filter, rng), 6)
   })
   it('can be concatenated with other collections', function () {
     const coll1 = new Collection([1, 2])
